@@ -16,7 +16,7 @@ const store = createStore({
     url: '',
     name: '',
     isSongSelected: false,
-    files: [],
+    files: [] as FileSystemHandle[],
   },
   getters: {
     getLastFile(state) {
