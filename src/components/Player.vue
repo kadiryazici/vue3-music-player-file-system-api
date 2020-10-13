@@ -19,16 +19,16 @@
             >{{ $store.getters.getDurationAsMinuteAndSeconds }}</h4>
          </div>
          <div class="text-center">
-            <button @click="() => $store.dispatch('playPrevious')" class="button">
+            <button @click="$store.dispatch('playPrevious')" class="button">
                <span class="icon material-icons">skip_previous</span>
             </button>
 
-            <button @click="() => $store.commit('togglePlaying')" class="button">
+            <button @click="$store.commit('togglePlaying')" class="button">
                <span v-if="!$store.state.isPlaying" class="icon material-icons">play_arrow</span>
                <span v-if="$store.state.isPlaying" class="icon material-icons">pause</span>
             </button>
 
-            <button @click="() => $store.dispatch('playNext', true)" class="button">
+            <button @click="$store.dispatch('playNext', true)" class="button">
                <span class="icon material-icons">skip_next</span>
             </button>
          </div>

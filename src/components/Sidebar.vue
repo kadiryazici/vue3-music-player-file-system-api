@@ -6,9 +6,9 @@
       <div class="item-list w-100 pb-4 pt-3">
          <small
             v-for="value of $store.state.files"
-            @dblclick="async () => await $nextTick()"
+            @dblclick="$nextTick()"
             :key="value.name"
-            @click="() => play(value)"
+            @click="play(value)"
             :class="{ active: value.name === $store.state.name, 'item d-block w-100 px-3 position-relative': true }"
          >
             <span class="curve-top">
