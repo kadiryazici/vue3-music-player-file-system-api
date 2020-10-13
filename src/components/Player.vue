@@ -3,10 +3,13 @@
       class="w-100 player p-4 d-flex align-items-center justify-content-center flex-wrap flex-row"
    >
       <div v-if="$store.state.isSongSelected" style="max-width: 650px" class="w-100">
+         <!-- LOGO OF PLAYER -->
          <div class="w-100 text-center">
             <img style="width: 175px; height: 175px" :src="require('@/static/logo.png')" alt />
          </div>
+         <!-- NAME OF CURRENT SONG -->
          <h3 class="text-center pb-3">{{ fixName($store.state.name) }}</h3>
+
          <div class="d-flex flex-nowrap align-items-center">
             <h4
                style="min-width: 70px"
@@ -35,7 +38,10 @@
       </div>
 
       <div v-else>
-         <h2>SELECT A SONG</h2>
+         <h2 class="text-center">SELECT A SONG</h2>
+         <p
+            class="text-center"
+         >You need to enable #native-file-system-api in chrome://flags - edge://flags and use at least version 86 for both.</p>
       </div>
    </div>
 </template>

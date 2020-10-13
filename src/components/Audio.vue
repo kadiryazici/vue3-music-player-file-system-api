@@ -4,7 +4,7 @@ import store from "@/store/index";
 export default defineComponent({
    name: "Audio",
    render() {
-      //it is going to render nothing.
+      //it is going to render nothing. IF YOU DONT PUT A SLOT TO THIS COMPONENT!!!!!!!!!!!!!!
       return this.$slots.default;
    },
 });

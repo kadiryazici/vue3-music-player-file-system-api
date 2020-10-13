@@ -6,46 +6,36 @@ declare global {
   }
 }
 
+import { convertSecondToMinuteAndSecond } from '@/lib/helper'
+
 const store = createStore({
   state: {
     isPlaying: false,
     duration: 0,
     currentTime: 0,
     muted: false,
-    loop: true,
+    loop: false,
     url: '',
     name: '',
     isSongSelected: false,
-    files: [],
+    files: [] as FileSystemHandle[],
   },
   getters: {
     getLastFile(state) {
       return state.files[ state.files.length - 1 ];
     },
     getCurrentFile(state) {
-      // eslint-disable-next-line
-      // @ts-ignore-next-line
       const file = state.files.findIndex(file => file.name === state.name);
       return state.files[ file ];
     },
     getCurrentFileIndex(state) {
-      // eslint-disable-next-line
-      // @ts-ignore-next-line
       return state.files.findIndex(file => file.name === state.name);
     },
     getCurrentTimeAsMinuteAndSeconds(state) {
-      const time = parseInt(state.currentTime.toString().split('.')[ 0 ]);
-      const minute = Math.floor(time / 60);
-      const second = time % 60;
-      const result = `${minute}:${second < 10 ? `0${second}` : second}`;
-      return result != 'NaN:NaN' ? result : '00:00'
+      return convertSecondToMinuteAndSecond(state.currentTime);
     },
     getDurationAsMinuteAndSeconds(state) {
-      const time = parseInt(state.duration.toString().split('.')[ 0 ]);
-      const minute = Math.floor(time / 60);
-      const second = time % 60;
-      const result = `${minute}:${second < 10 ? `0${second}` : second}`;
-      return result != 'NaN:NaN' ? result : '00:00'
+      return convertSecondToMinuteAndSecond(state.duration);
     }
   },
   mutations: {
@@ -91,19 +81,11 @@ const store = createStore({
   },
   actions: {
     async playNext({ commit, state, getters }, nextButton = false) {
-      //eslint-disable-next-line
-      // @ts-ignore-next-line
       if (!state.loop || nextButton) {
         if (getters.getCurrentFileIndex !== state.files.length - 1) {
-          //eslint-disable-next-line
-          // @ts-ignore-next-line
-          const index = getters.getCurrentFileIndex;
+          const index = getters.getCurrentFileIndex as number;
           const file = state.files[ index + 1 ];
-          //eslint-disable-next-line
-          // @ts-ignore-next-line
-          const url = URL.createObjectURL(await file.getFile());
-          //eslint-disable-next-line
-          // @ts-ignore-next-line
+          const url = URL.createObjectURL(file.kind === 'file' ? await file.getFile() : null);
           commit('setName', file.name);
           commit('setUrl', url);
           commit('setPlaying', true);
@@ -116,19 +98,15 @@ const store = createStore({
     },
 
     async playPrevious({ commit, state, getters }) {
-      //eslint-disable-next-line
-      // @ts-ignore-next-line
       const audio = window.vAudio;
       if ((audio.currentTime < 10 && audio.currentTime > 1) || getters.getCurrentFileIndex === 0) {
         audio.currentTime = 0
       } else {
         const index = getters.getCurrentFileIndex;
         const file = state.files[ index - 1 ];
-        //eslint-disable-next-line
-        // @ts-ignore-next-line
-        const url = URL.createObjectURL(await file.getFile());
-        //eslint-disable-next-line
-        // @ts-ignore-next-line
+
+        //file.kind is just for type errors, file variable is always a file.
+        const url = URL.createObjectURL(file.kind === 'file' ? await file.getFile() : null);
         commit('setName', file.name);
         commit('setUrl', url);
         commit('setPlaying', true);

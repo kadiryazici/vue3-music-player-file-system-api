@@ -6,7 +6,6 @@
       <div class="item-list w-100 pb-4 pt-3">
          <small
             v-for="value of $store.state.files"
-            @dblclick="$nextTick"
             :key="value.name"
             @click="play(value)"
             :class="{ active: value.name === $store.state.name, 'item d-block w-100 px-3 position-relative': true }"
@@ -53,8 +52,7 @@ export const selectFolder = async () => {
       name = name[name.length - 1];
       return name.match(regex);
    });
-   store.commit("setPlaying", false);
-   store.commit("setSongSelected", false);
+   store.commit("reset");
    store.commit("setFiles", files.value);
    files.value = [];
 };
